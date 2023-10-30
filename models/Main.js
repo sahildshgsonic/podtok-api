@@ -11,6 +11,8 @@ const sequelize = new Sequelize(
   {
     host: dbconfing.HOST,
     dialect: dbconfing.dialect,
+    port: "3306",
+    logging: false,
 
     //     pool: {
     //       max: dbconfing.pool.max,
@@ -42,6 +44,8 @@ db.reels = require("./reelsmodel.js")(sequelize, DataTypes);
 db.likes = require("./likesmodel.js")(sequelize, DataTypes);
 db.token = require("./token.js")(sequelize, DataTypes);
 db.reellikes = require("./reellike.js")(sequelize, DataTypes);
+db.reelcomment = require("./reelcomment.js")(sequelize, DataTypes);
+db.postsave = require("./savemodel.js")(sequelize, DataTypes);
 
 db.sequelize.sync({ force: false }).then(() => {
   console.log("re sync is done");
@@ -60,10 +64,19 @@ db.comments.belongsTo(db.posts, {
 db.likes.belongsTo(db.posts);
 db.posts.hasMany(db.likes);
 
+db.postsave.belongsTo(db.posts);
+db.posts.hasMany(db.postsave);
+
 db.reellikes.belongsTo(db.reels);
 db.reels.hasMany(db.reellikes);
 
 db.posts.belongsTo(db.register);
 db.register.hasMany(db.posts);
+
+db.reels.belongsTo(db.register);
+db.register.hasMany(db.reels);
+
+db.reels.hasMany(db.reelcomment);
+db.reelcomment.belongsTo(db.reels);
 
 module.exports = db;

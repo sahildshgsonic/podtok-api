@@ -13,6 +13,8 @@ const {
   getlike,
   getalllike,
   getdislike,
+  savepost,
+  removesave,
 } = require("../controller/Addpost");
 const multer = require("multer");
 const {
@@ -24,6 +26,7 @@ const {
 const comment = require("../controller/Comment");
 const mpconvert = require("../controller/mp4convert");
 const { addcomment, getallcomment } = require("../controller/Addcomment");
+const { reelcomment, getallreelcomment } = require("../controller/Reelcomment");
 
 const router = express.Router();
 
@@ -72,5 +75,10 @@ router.get("/user-details/:id", UserDetails);
 router.post("/likereel", likeReel);
 router.delete("/reeldislike", getdislikereel);
 router.post("/forgotverify", forgotVerify);
+router.post("/addreelcomm", reelcomment);
+router.get("/getallreelcomm", getallreelcomment);
+router.post("/updateuser", registeruser.updateUser);
+router.post("/savepost", savepost);
+router.delete("/removesave", removesave);
 
 module.exports = router;

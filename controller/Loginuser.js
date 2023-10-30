@@ -7,6 +7,7 @@ const nodemailer = require("nodemailer");
 const userToken = db.token;
 const Login = db.register;
 const post = db.posts;
+const reel = db.reels;
 
 const Loginuser = async (req, res) => {
   const { email, password } = req.body;
@@ -86,6 +87,9 @@ const UserDetails = async (req, res) => {
       include: [
         {
           model: post,
+        },
+        {
+          model: reel,
         },
       ],
       where: { id: id },

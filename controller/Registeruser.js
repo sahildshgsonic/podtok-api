@@ -95,6 +95,7 @@ const deleteuser = async (req, res) => {
 
 const verifyuser = async (req, res) => {
   const { id, otp } = req.body;
+  console.log("frgbgnfd", otp);
   try {
     const user = await userToken.findOne({ where: { userId: id } });
     console.log("aftwer user find");
@@ -118,4 +119,13 @@ const verifyuser = async (req, res) => {
   } catch (error) {}
 };
 
-module.exports = { alluser, registeruser, deleteuser, verifyuser };
+const updateUser = async (req, res) => {
+  const change = await Register.update(
+    { Name: req.body.name, Profile: req.body.profile },
+    { where: { id: req.body.id } }
+  );
+  console.log("555555555", change);
+  res.send("update successfully");
+};
+
+module.exports = { alluser, registeruser, deleteuser, verifyuser, updateUser };

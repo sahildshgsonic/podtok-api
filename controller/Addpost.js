@@ -6,6 +6,7 @@ const Post = db.posts;
 const Comment = db.comments;
 const Like = db.likes;
 const Register = db.register;
+const Postsave = db.postsave;
 
 const addpost = async (req, res) => {
   try {
@@ -38,6 +39,9 @@ const findallpost = async (req, res) => {
         },
         {
           model: Register,
+        },
+        {
+          model: Postsave,
         },
       ],
       order: [["id", "DESC"]],
@@ -81,6 +85,23 @@ const getlike = async (req, res) => {
   }
 };
 
+const savepost = async (req, res) => {
+  try {
+    const { postid } = req.query;
+    // const data = await Post.findByPk(postid);
+    // console.log("====================", data);
+
+    let info = {
+      postId: req.query.postid,
+      Email: req.body.email,
+    };
+    await Postsave.create(info);
+    return res.status(200).json({ message: "Post liked" });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 const getdislike = async (req, res) => {
   try {
     //console.log("=================+++++++++++", req.body);
@@ -96,6 +117,26 @@ const getdislike = async (req, res) => {
     // });
     console.log("data destroy");
     return res.status(200).json({ message: "Post unliked" });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const removesave = async (req, res) => {
+  try {
+    //console.log("=================+++++++++++", req.body);
+    const dislike = await Postsave.destroy({
+      where: {
+        [Op.and]: [{ Email: req.body.email }, { postId: req.query.postid }],
+      },
+    });
+    //console.log(dislike);
+    // const id = await dislike.id;
+    // await Like.destroy({
+    //   where: { id: id },
+    // });
+    console.log("data destroy");
+    return res.status(200).json({ message: "remove from save" });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
@@ -126,4 +167,6 @@ module.exports = {
   getlike,
   getalllike,
   getdislike,
+  savepost,
+  removesave,
 };
